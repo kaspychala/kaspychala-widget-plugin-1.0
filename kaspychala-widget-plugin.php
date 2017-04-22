@@ -19,23 +19,33 @@ class kaspychala_widget extends WP_Widget {
 
 
   // Create the widget output.
-  public function widget( $args, $instance ) {	
-	echo $args['before_widget'] . $args['before_title'] . $args['after_title']; ?>
+  public function widget( $args, $instance ) {  
+  echo $args['before_widget'] . $args['before_title'] . $args['after_title']; ?>
     </br>
-    <p><h1>Słowo na dziś!</h1></p>
-    <p><h2><b><?php
+    <p><h2>Słowo na dziś!</h2></p>
+    <hr />
+    <p><h3><b><?php
 
-	$doc = new DOMDocument();
-	@$doc->loadHTMLFile('http://nfjp.pl/random/');
-	$xPath = new DOMXpath($doc);
-	$elements = $xPath->query("//*[@id='post-x']/div[1]/h1");
-	if( !is_null( $elements)){
-		foreach ($elements as $element){
-			echo utf8_decode($element->nodeValue);
-			$element->parentNode->removeChild( $element);
-		}
-	}
-	?></b></h2></p>
+  $doc = new DOMDocument();
+  @$doc->loadHTMLFile('http://nfjp.pl/random/');
+  $xPath = new DOMXpath($doc);
+  $src = $xPath->query("//*[@id='post-x']/div[1]/img/@src");
+  $elements = $xPath->query("//*[@id='post-x']/div[1]/h1");
+  if( !is_null( $elements)){
+    foreach ($elements as $element){
+      echo utf8_decode($element->nodeValue);
+      $element->parentNode->removeChild( $element);
+    }
+  }
+  ?></b></h3></p>
+  <p><img src="<?php
+    if( !is_null( $src)){
+    foreach ($src as $element){
+      echo utf8_decode($element->nodeValue);
+      }
+    }
+    ?>"></img>
+  
     <?php echo $args['after_widget'];
   }
 
